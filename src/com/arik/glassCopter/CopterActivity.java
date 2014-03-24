@@ -34,14 +34,10 @@ public class CopterActivity extends Activity{
 
         this.helloView = (TextView)findViewById(R.id.textView);
 
-
-
         final float[] mValuesMagnet      = new float[3];
         final float[] mValuesAccel       = new float[3];
-        final float[] mValuesOrientation = new float[3];
-        final float[] mRotationMatrix    = new float[9];
 
-        SensorManager sensorManager = (SensorManager)this.getSystemService(SENSOR_SERVICE);
+        final SensorManager sensorManager = (SensorManager)this.getSystemService(SENSOR_SERVICE);
 
         SensorEventListener sensorEventListener = new SensorEventListener() {
 
@@ -60,28 +56,7 @@ public class CopterActivity extends Activity{
                         break;
                 }
 
-
-                SensorManager.getRotationMatrix(mRotationMatrix, null, mValuesAccel, mValuesMagnet);
-                SensorManager.getOrientation(mRotationMatrix, mValuesOrientation);
-                final CharSequence test;
-                test = "results: " + mValuesOrientation[0] +" "+mValuesOrientation[1]+ " "+ mValuesOrientation[2];
-
-
-                helloView.setText("α: "+ Math.round(Math.toDegrees(mValuesOrientation[0])) +"\nβ: " + Math.round(Math.toDegrees(mValuesOrientation[1])) + "\nγ: " + Math.round(Math.toDegrees(mValuesOrientation[2])) );
-                // helloView.setText("α: "+ mValuesOrientation[0] +"\nβ: " + mValuesOrientation[1] + "\nγ: " + mValuesOrientation[2] );
-
-
-                // helloView.setText(test);
-
-
-
-                /* if(sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
-
-                    System.arraycopy(sensorEvent.values, 0, mValuesAccel, 0, 3);
-                    helloView.setText("α: "+Math.round(mValuesAccel[0] * 10)/10.0 +"\nβ: " + Math.round(mValuesAccel[1] * 10)/10.0 + "\nγ: " + Math.round(mValuesAccel[2]*10)/10.0);
-
-                } */
-
+                displaySensorValues(mValuesAccel, mValuesMagnet);
             }
 
             @Override
@@ -92,6 +67,29 @@ public class CopterActivity extends Activity{
         };
 
         setListeners(sensorManager, sensorEventListener);
+    }
+
+    private void displaySensorValues(float[] mValuesAccel, float[] mValuesMagnet) {
+
+        float[] mValuesOrientation = new float[3];
+        float[] mRotationMatrix    = new float[9];
+
+        SensorManager.getRotationMatrix(mRotationMatrix, null, mValuesAccel, mValuesMagnet);
+        SensorManager.getOrientation(mRotationMatrix, mValuesOrientation);
+
+        // CharSequence test;
+        // test = "results: " + mValuesOrientation[0] +" "+mValuesOrientation[1]+ " "+ mValuesOrientation[2];
+        // helloView.setText(test);
+
+        helloView.setText("α: "+ Math.round(Math.toDegrees(mValuesOrientation[0])) +"\nβ: " + Math.round(Math.toDegrees(mValuesOrientation[1])) + "\nγ: " + Math.round(Math.toDegrees(mValuesOrientation[2])) );
+        // helloView.setText("α: "+ mValuesOrientation[0] +"\nβ: " + mValuesOrientation[1] + "\nγ: " + mValuesOrientation[2] );
+
+        /* if(sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
+
+            System.arraycopy(sensorEvent.values, 0, mValuesAccel, 0, 3);
+            helloView.setText("α: "+Math.round(mValuesAccel[0] * 10)/10.0 +"\nβ: " + Math.round(mValuesAccel[1] * 10)/10.0 + "\nγ: " + Math.round(mValuesAccel[2]*10)/10.0);
+
+        } */
     }
 
     // Register the event listener and sensor type.
